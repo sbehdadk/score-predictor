@@ -1,0 +1,57 @@
+name: Deploy to Hugging Face
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.8"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Build Docker image
+        run: |
+          docker build -t sbehdadk/score-predictor:latest .
+
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Push Docker image
+        run: |
+          docker tag sbehdadk/score-predictor:latest sbehdadk/score-predictor:latest
+          docker push sbehdadk/score-predictor:latest
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Set up Git credentials helper
+        run: |
+          git config --global credential.helper store
+
+      - name: Commit Changes
+        run: |
+          git add .
+          git commit -m "Sync changes to GitHub and Hugging Face" || echo "No changes to commit"
+
+      - name: Push to GitHub
+        run: git push origin main
+
+      - name: Push to Hugging Face
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: git push https://${{ secrets.HF_USERNAME }}:$HF_TOKEN@huggingface.co/spaces/sbehdadk/score-predictor main

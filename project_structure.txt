@@ -1,0 +1,92 @@
+.
+├── app
+│   ├── components
+│   │   ├── artifacts
+│   │   │   ├── model.pkl
+│   │   │   ├── preprocessed_model.pkl
+│   │   │   ├── raw_data.csv
+│   │   │   ├── test_data.csv
+│   │   │   └── train_data.csv
+│   │   ├── data_ingestion.py
+│   │   ├── data_transformation.py
+│   │   ├── __init__.py
+│   │   ├── model_trainer.py
+│   │   └── __pycache__
+│   │       ├── data_ingestion.cpython-310.pyc
+│   │       ├── data_ingestion.cpython-312.pyc
+│   │       ├── data_transformation.cpython-310.pyc
+│   │       ├── data_transformation.cpython-312.pyc
+│   │       ├── __init__.cpython-310.pyc
+│   │       ├── __init__.cpython-312.pyc
+│   │       ├── model_trainer.cpython-310.pyc
+│   │       └── model_trainer.cpython-312.pyc
+│   ├── data
+│   │   └── stud.csv
+│   ├── exception.py
+│   ├── __init__.py
+│   ├── logger.py
+│   ├── notebooks
+│   │   ├── EDA.ipynb
+│   │   └── StudentsPerformance.xls
+│   ├── pipeline
+│   │   ├── __init__.py
+│   │   ├── predict_pipeline.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-310.pyc
+│   │   │   ├── __init__.cpython-312.pyc
+│   │   │   ├── __init__.cpython-39.pyc
+│   │   │   ├── predict_pipeline.cpython-310.pyc
+│   │   │   ├── predict_pipeline.cpython-312.pyc
+│   │   │   └── predict_pipeline.cpython-39.pyc
+│   │   └── train_pipeline.py
+│   ├── __pycache__
+│   │   ├── exception.cpython-310.pyc
+│   │   ├── exception.cpython-312.pyc
+│   │   ├── exception.cpython-39.pyc
+│   │   ├── __init__.cpython-310.pyc
+│   │   ├── __init__.cpython-312.pyc
+│   │   ├── __init__.cpython-39.pyc
+│   │   ├── logger.cpython-310.pyc
+│   │   ├── logger.cpython-312.pyc
+│   │   ├── logger.cpython-39.pyc
+│   │   ├── utils.cpython-310.pyc
+│   │   ├── utils.cpython-312.pyc
+│   │   └── utils.cpython-39.pyc
+│   ├── streamlit
+│   │   ├── dashboard.py
+│   │   ├── home.py
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── dashboard.cpython-39.pyc
+│   │   │   ├── home.cpython-39.pyc
+│   │   │   ├── __init__.cpython-39.pyc
+│   │   │   └── visualization.cpython-39.pyc
+│   │   └── visualization.py
+│   └── utils.py
+├── catboost_info
+│   ├── catboost_training.json
+│   ├── learn
+│   │   └── events.out.tfevents
+│   ├── learn_error.tsv
+│   ├── time_left.tsv
+│   └── tmp
+├── Dockerfile
+├── entrypoint.sh
+├── env.py
+├── main.py
+├── nginx.conf
+├── project_structure.txt
+├── __pycache__
+│   ├── application.cpython-312.pyc
+│   └── env.cpython-310.pyc
+├── README.md
+├── requirements.txt
+├── streamlit.py
+├── supervisord.conf
+└── tests
+    ├── __init__.py
+    └── __pycache__
+
+17 directories, 70 files
+
+
