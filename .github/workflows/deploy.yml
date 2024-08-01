@@ -55,9 +55,7 @@ jobs:
           GH_PAT: ${{ secrets.GH_PAT }}
         shell: bash
 
-      - name: Push to Hugging Face
+      - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: |
-          git pull https://huggingface.co/spaces/${{ secrets.HF_USERNAME }}/score-predictor main
-          git push https://huggingface.co/spaces/${{ secrets.HF_USERNAME }}/score-predictor main
+        run: git push https://sbehdadk:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/sbehdadk/score-predictor main
