@@ -16,7 +16,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.8"
+          python-version: "3.9"
 
       - name: Install dependencies
         run: |
@@ -24,15 +24,15 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t sbehdadk/score-predictor:latest .
+          docker build -t sbehdad/score-predictor:latest .
 
       - name: Log in to Docker Hub
         run: echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
 
       - name: Push Docker image
         run: |
-          docker tag sbehdadk/score-predictor:latest sbehdadk/score-predictor:latest
-          docker push sbehdadk/score-predictor:latest
+          docker tag sbehdad/score-predictor:latest sbehdad/score-predictor:latest
+          docker push sbehdad/score-predictor:latest
 
       - name: Configure Git
         run: |
