@@ -4,16 +4,16 @@ import pandas as pd
 
 import env
 
-from app.logger import logging
-from app.exception import CustomizedException
-from app.components.data_transformation import (
+from src.logger import logging
+from src.exception import CustomizedException
+from src.components.data_transformation import (
     DataTransformer,
     DataTransformerConfig,
 )
 from sklearn.model_selection import train_test_split
 from dataclasses import dataclass
 
-from app.components.model_trainer import Model
+from src.components.model_trainer import Model
 
 
 @dataclass
@@ -27,9 +27,7 @@ class DataIngestionConfig:
 class DataIngestion:
     def __init__(self):
         self.data_ingestion_config = DataIngestionConfig()
-        self.data_ingestion_config.artifacts_path.mkdir(
-            parents=True, exist_ok=True
-        )
+        self.data_ingestion_config.artifacts_path.mkdir(parents=True, exist_ok=True)
         logging.info("data ingestion initialized...")
 
     def data_ingesting(self, file_name: str):
@@ -74,8 +72,8 @@ class DataIngestion:
 
 def main():
     data_ingestion = DataIngestion()
-    train_data_path, test_data_path, raw_data_path = (
-        data_ingestion.data_ingesting("src/data/stud.csv")
+    train_data_path, test_data_path, raw_data_path = data_ingestion.data_ingesting(
+        "src/data/stud.csv"
     )
 
     data_transformer = DataTransformer(

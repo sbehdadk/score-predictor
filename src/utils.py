@@ -6,8 +6,8 @@ from pathlib import Path
 from sklearn.compose import ColumnTransformer
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from sklearn.model_selection import GridSearchCV
-from app.exception import CustomizedException
-from app.logger import logging
+from src.exception import CustomizedException
+from src.logger import logging
 
 
 def save_to_pickle_object(file_path: Path, object: ColumnTransformer):

@@ -12,9 +12,9 @@ from sklearn.impute import SimpleImputer  # handle non-value
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler, OneHotEncoder
 
-from app.exception import CustomizedException
-from app.logger import logging
-from app.utils import save_to_pickle_object
+from src.exception import CustomizedException
+from src.logger import logging
+from src.utils import save_to_pickle_object
 
 
 @dataclass
@@ -48,9 +48,7 @@ class DataTransformer:
 
     @staticmethod
     def get_categorical_cols(data_frame: DataFrame):
-        return list(
-            filter(lambda x: data_frame[x].dtype == "O", data_frame.columns)
-        )
+        return list(filter(lambda x: data_frame[x].dtype == "O", data_frame.columns))
 
     def get_feature_data_frame(self, data_frame: DataFrame):
         return data_frame.drop(columns=[self.target_col], axis=1)
@@ -135,17 +133,11 @@ class DataTransformer:
             target_test_data_frame = self.get_target_data_frame(test_df)
 
             logging.info("data transformation started...")
-            train_data_array = preprocessor.fit_transform(
-                input_train_data_frame
-            )
+            train_data_array = preprocessor.fit_transform(input_train_data_frame)
             test_data_array = preprocessor.transform(input_test_data_frame)
 
-            train_array = np.c_[
-                train_data_array, np.array(target_train_data_frame)
-            ]
-            test_array = np.c_[
-                test_data_array, np.array(target_test_data_frame)
-            ]
+            train_array = np.c_[train_data_array, np.array(target_train_data_frame)]
+            test_array = np.c_[test_data_array, np.array(target_test_data_frame)]
 
             logging.info("data transformation completed successfully...")
             save_to_pickle_object(

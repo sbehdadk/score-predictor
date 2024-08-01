@@ -4,7 +4,7 @@ from fastapi import FastAPI, Form
 from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from app.pipeline.predict_pipeline import CustomDataSource, PredictPipeline
+from src.pipeline.predict_pipeline import CustomDataSource, PredictPipeline
 
 app = FastAPI()
 

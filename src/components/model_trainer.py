@@ -14,9 +14,9 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 from xgboost import XGBRegressor
 
-from app.exception import CustomizedException
-from app.logger import logging
-from app.utils import save_to_pickle_object, evaluate_models
+from src.exception import CustomizedException
+from src.logger import logging
+from src.utils import save_to_pickle_object, evaluate_models
 
 
 @dataclass

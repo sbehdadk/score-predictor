@@ -1,9 +1,9 @@
 from pathlib import Path
 import sys
 import pandas as pd
-from app.exception import CustomizedException
-from app.logger import logging
-from app.utils import load_object
+from src.exception import CustomizedException
+from src.logger import logging
+from src.utils import load_object
 
 
 class PredictPipeline:
@@ -12,9 +12,7 @@ class PredictPipeline:
 
     def predict(self, features):
         try:
-            model_path = (
-                Path(__file__).parents[1] / "components/artifacts/model.pkl"
-            )
+            model_path = Path(__file__).parents[1] / "components/artifacts/model.pkl"
             preprocessor_path = (
                 Path(__file__).parents[1]
                 / "components/artifacts/preprocessed_model.pkl"
@@ -54,9 +52,7 @@ class CustomDataSource:
             custom_data_input_dict = {
                 "gender": [self.gender],
                 "race_ethnicity": [self.race_ethnicity],
-                "parental_level_of_education": [
-                    self.parental_level_of_education
-                ],
+                "parental_level_of_education": [self.parental_level_of_education],
                 "lunch": [self.lunch],
                 "test_preparation_course": [self.test_preparation_course],
                 "reading_score": [self.reading_score],

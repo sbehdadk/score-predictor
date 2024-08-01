@@ -1,7 +1,7 @@
 import streamlit as st
-from app.streamlit.home import show_home
-from app.streamlit.dashboard import show_dashboard
-from app.streamlit.visualization import show_visualization
+from src.streamlit.home import show_home
+from src.streamlit.dashboard import show_dashboard
+from src.streamlit.visualization import show_visualization
 import requests
 
 api_url = "https://sbehdadk-score-predictor.hf.space/api/prediction"
