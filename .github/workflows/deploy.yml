@@ -20,6 +20,9 @@ jobs:
 
       - name: Install dependencies
         run: |
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Build Docker image
@@ -47,9 +50,10 @@ jobs:
         run: |
           git add .
           git commit -m "Sync changes to GitHub and Hugging Face" || echo "No changes to commit"
-
-      - name: Push to GitHub
-        run: git push origin main
+          git push origin main
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        shell: bash
 
       - name: Push to Hugging Face
         env:
