@@ -28,9 +28,7 @@ def show_dashboard():
     col1, col2 = st.columns(2)
 
     with col1:
-        gender = st.selectbox(
-            "Gender", ["male", "female"], placeholder="Gender"
-        )
+        gender = st.selectbox("Gender", ["male", "female"], placeholder="Gender")
         race_ethnicity = st.selectbox(
             "Race",
             ["group A", "group B", "group C", "group D", "group E"],
@@ -50,9 +48,7 @@ def show_dashboard():
         )
 
     with col2:
-        lunch = st.selectbox(
-            "Lunch", ["free/reduced", "standard"], placeholder="Lunch"
-        )
+        lunch = st.selectbox("Lunch", ["free/reduced", "standard"], placeholder="Lunch")
         test_preparation_course = st.selectbox(
             "Test Preparation Course",
             ["completed", "none"],
