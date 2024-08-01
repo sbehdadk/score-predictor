@@ -8,6 +8,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      actions: write
 
     steps:
       - name: Checkout code
@@ -42,16 +46,13 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
-      - name: Set up Git credentials helper
-        run: |
-          git config --global credential.helper 'cache --timeout=3600'
-          echo "https://${{ secrets.GH_PAT }}:@github.com" > ~/.git-credentials
-
-      - name: Commit Changes
+      - name: Commit and Push Changes
         run: |
           git add .
           git commit -m "Sync changes to GitHub and Hugging Face" || echo "No changes to commit"
           git push https://github-actions[bot]:${{ secrets.GH_PAT }}@github.com/${{ github.repository }} main
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
         shell: bash
 
       - name: Push to Hugging Face
