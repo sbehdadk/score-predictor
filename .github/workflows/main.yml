@@ -36,5 +36,8 @@ jobs:
           echo "${{ secrets.HF_TOKEN }}" | docker login --username ${{ secrets.HF_USERNAME }} --password-stdin huggingface.co
 
       - name: Build and Push Docker image
+        env:
+          DOCKER_CLI_EXPERIMENTAL: enabled
+
         run: |
           docker buildx build --platform linux/amd64,linux/arm64 -t huggingface.co/spaces/${{ secrets.HF_USERNAME }}/score-predictor:latest --push .
