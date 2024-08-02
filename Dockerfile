@@ -1,5 +1,9 @@
 FROM python:3.10-slim
 
+# Create a new user and group
+RUN groupadd -g 1001 appgroup && \
+    useradd -u 1001 -g appgroup -m appuser
+
 # Set the working directory
 WORKDIR /app
 
@@ -21,10 +25,10 @@ RUN rm /etc/nginx/sites-enabled/default
 COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Set permissions for Nginx directories and configuration files
+# Create necessary directories and set permissions
 RUN mkdir -p /var/log/nginx /var/cache/nginx /var/run && \
     chown -R appuser:appgroup /var/log/nginx /var/cache/nginx /var/run && \
-    chmod -R 755 /var/log/nginx /var/cache/nginx /var/run && \
+    chmod -R 755 /var/log/nginx /var/cache/nginx /var_run && \
     chown -R root:root /etc/nginx && \
     chmod -R 644 /etc/nginx/nginx.conf
 
