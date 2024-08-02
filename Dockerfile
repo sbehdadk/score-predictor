@@ -21,8 +21,7 @@ COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories with the right permissions
-RUN mkdir -p /var/lib/nginx/body && chown -R www-data:www-data /var/lib/nginx
-
+RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy && chown -R www-data:www-data /var/lib/nginx
 # Create a shell script to run both FastAPI and Streamlit
 RUN echo "#!/bin/bash\n\
     uvicorn main:app --host 127.0.0.1 --port 8000 &\n\
