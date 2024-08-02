@@ -25,9 +25,8 @@ COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories with the right permissions
-# Create necessary directories with the right permissions
-RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi && \
-    chown -R appuser:appgroup /var/lib/nginx
+RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/uwsgi && \
+    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/run
 
 # Create a shell script to run both FastAPI and Streamlit
 RUN echo "#!/bin/bash\n\
@@ -37,6 +36,9 @@ RUN echo "#!/bin/bash\n\
 
 # Make the script executable
 RUN chmod +x /app/start.sh
+
+# Change ownership of the /app directory to appuser
+RUN chown -R appuser:appgroup /app
 
 # Switch to the new user
 USER appuser
