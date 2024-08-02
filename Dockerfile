@@ -17,7 +17,10 @@ RUN apt-get update && apt-get install -y nginx
 RUN rm /etc/nginx/sites-enabled/default
 
 # Copy the Nginx configuration file
-COPY nginx.conf /etc/nginx/sites-enabled/
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Create necessary directories with the right permissions
+RUN mkdir -p /var/lib/nginx/body && chown -R www-data:www-data /var/lib/nginx
 
 # Create a shell script to run both FastAPI and Streamlit
 RUN echo "#!/bin/bash\n\
