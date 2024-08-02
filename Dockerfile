@@ -1,5 +1,9 @@
 FROM python:3.10-slim
 
+# Create a new user and group
+RUN groupadd -g 1001 appgroup && \
+    useradd -u 1001 -g appgroup -m appuser
+
 # Set the working directory
 WORKDIR /app
 
@@ -21,7 +25,13 @@ COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories with the right permissions
-RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy && chown -R www-data:www-data /var/lib/nginx
+# Create necessary directories with the right permissions
+RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi && \
+    chown -R appuser:appgroup /var/lib/nginx
+
+# Switch to the new user
+USER appuser
+
 # Create a shell script to run both FastAPI and Streamlit
 RUN echo "#!/bin/bash\n\
     uvicorn main:app --host 127.0.0.1 --port 8000 &\n\
