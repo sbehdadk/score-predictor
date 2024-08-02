@@ -29,9 +29,6 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi && \
     chown -R appuser:appgroup /var/lib/nginx
 
-# Switch to the new user
-USER appuser
-
 # Create a shell script to run both FastAPI and Streamlit
 RUN echo "#!/bin/bash\n\
     uvicorn main:app --host 127.0.0.1 --port 8000 &\n\
@@ -40,6 +37,9 @@ RUN echo "#!/bin/bash\n\
 
 # Make the script executable
 RUN chmod +x /app/start.sh
+
+# Switch to the new user
+USER appuser
 
 # Expose the necessary ports
 EXPOSE 80
