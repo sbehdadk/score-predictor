@@ -1,9 +1,5 @@
 FROM python:3.10-slim
 
-# Create a new user and group
-RUN groupadd -g 1001 appgroup && \
-    useradd -u 1001 -g appgroup -m appuser
-
 # Set the working directory
 WORKDIR /app
 
@@ -25,13 +21,11 @@ RUN rm /etc/nginx/sites-enabled/default
 COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Create necessary directories with the right permissions
-RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/uwsgi /var/lib/nginx/scgi /var/cache/nginx /var/run /var/log/nginx && \
-    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/run /var/cache/nginx && \
-    chmod -R 755 /var/lib/nginx /var/log/nginx /var/run /var/cache/nginx
-
-# Ensure nginx.conf and other config files have correct permissions
-RUN chown -R root:root /etc/nginx && \
+# Set permissions for Nginx directories and configuration files
+RUN mkdir -p /var/log/nginx /var/cache/nginx /var/run && \
+    chown -R appuser:appgroup /var/log/nginx /var/cache/nginx /var/run && \
+    chmod -R 755 /var/log/nginx /var/cache/nginx /var/run && \
+    chown -R root:root /etc/nginx && \
     chmod -R 644 /etc/nginx/nginx.conf
 
 # Create a shell script to run both FastAPI and Streamlit
