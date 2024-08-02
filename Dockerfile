@@ -13,14 +13,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code
 COPY . .
 
-# Install forego to manage multiple processes
-RUN apt-get update && apt-get install -y forego
+# Create a shell script to run both FastAPI and Streamlit
+RUN echo "#!/bin/bash\n\
+    uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
+    streamlit run streamlit.py --server.port 8501\n" > /app/start.sh
 
-# Create a Procfile to start both FastAPI and Streamlit
-RUN echo "web: sh -c 'uvicorn main:app --host 0.0.0.0 --port 8000 & streamlit run streamlit.py --server.port 8501'" > Procfile
+# Make the script executable
+RUN chmod +x /app/start.sh
 
 # Expose the necessary ports
 EXPOSE 8000 8501
 
-# Command to run the application
-CMD ["forego", "start", "-f", "Procfile"]
+# Command to run the shell script
+CMD ["/app/start.sh"]
