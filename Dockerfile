@@ -15,7 +15,8 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 COPY . /app
 
 # Install Nginx
-RUN apt-get update && apt-get install -y nginx
+RUN apt-get update && apt-get install -y nginx && \
+    rm -rf /var/lib/apt/lists/*
 
 # Remove the default Nginx configuration file
 RUN rm /etc/nginx/sites-enabled/default
@@ -26,9 +27,12 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories with the right permissions
 RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/uwsgi /var/lib/nginx/scgi /var/cache/nginx /var/run /var/log/nginx /etc/nginx && \
-    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/run /etc/nginx /var/cache/nginx && \
-    chmod -R 750 /var/lib/nginx /var/log/nginx /var/run /etc/nginx /var/cache/nginx
+    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/run /var/cache/nginx && \
+    chmod -R 750 /var/lib/nginx /var/log/nginx /var/run /var/cache/nginx
 
+# Ensure nginx.conf and other config files have correct permissions
+RUN chown -R appuser:appgroup /etc/nginx && \
+    chmod -R 750 /etc/nginx
 
 # Create a shell script to run both FastAPI and Streamlit
 RUN echo "#!/bin/bash\n\
