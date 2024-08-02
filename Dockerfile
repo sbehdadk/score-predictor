@@ -26,7 +26,8 @@ COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories with the right permissions
 RUN mkdir -p /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/uwsgi /var/lib/nginx/scgi /var/cache/nginx /var/run /var/log/nginx /etc/nginx && \
-    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/run /etc/nginx /var/cache/nginx
+    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/run /etc/nginx /var/cache/nginx && \
+    chmod -R 750 /var/lib/nginx /var/log/nginx /var/run /etc/nginx /var/cache/nginx
 
 
 # Create a shell script to run both FastAPI and Streamlit
