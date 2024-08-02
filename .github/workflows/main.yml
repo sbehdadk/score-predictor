@@ -37,4 +37,4 @@ jobs:
 
       - name: Build and Push Docker image
         run: |
-          docker buildx build --platform linux/amd64,linux/arm64 -t huggingface.co/${{ secrets.HF_USERNAME }}/score-predictor:latest --push .
+          docker buildx build --platform linux/amd64,linux/arm64 -t huggingface.co/spaces/sbehdadk/score-predictor:latest --push .
