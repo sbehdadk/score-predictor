@@ -4,11 +4,11 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # Install required packages
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r /app/requirements.txt
 
 # Copy the application files
-COPY . .
+COPY . /app
 
 # Install Nginx
 RUN apt-get update && apt-get install -y nginx
@@ -16,8 +16,9 @@ RUN apt-get update && apt-get install -y nginx
 # Remove the default Nginx configuration file
 RUN rm /etc/nginx/sites-enabled/default
 
-# Copy the Nginx configuration file
-COPY nginx.conf /etc/nginx/nginx.conf
+# Copy the Nginx configuration files
+COPY nginx/app.conf /etc/nginx/conf.d/
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories with the right permissions
 RUN mkdir -p /var/lib/nginx/body && chown -R www-data:www-data /var/lib/nginx
