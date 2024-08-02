@@ -16,6 +16,7 @@ numpy==2.0.1
 pandas==2.2.2
 pip==24.2
 platformdirs==4.2.2
+procfile==0.1.0
 pydantic==2.8.2
 pydantic_core==2.20.1
 python-dateutil==2.9.0.post0
