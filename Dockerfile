@@ -7,16 +7,15 @@ RUN groupadd -g 1001 appgroup && \
 # Set the working directory
 WORKDIR /app
 
-# Install required packages
+# Install required packages and distutils
 COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN apt-get update && \
+    apt-get install -y python3-distutils nginx && \
+    rm -rf /var/lib/apt/lists/* && \
+    pip install --no-cache-dir -r /app/requirements.txt
 
 # Copy the application files
 COPY . /app
-
-# Install Nginx
-RUN apt-get update && apt-get install -y nginx && \
-    rm -rf /var/lib/apt/lists/*
 
 # Remove the default Nginx configuration file
 RUN rm /etc/nginx/sites-enabled/default
@@ -30,14 +29,26 @@ RUN chown -R root:root /etc/nginx && \
     chmod -R 644 /etc/nginx/nginx.conf
 
 # Create necessary directories with the right permissions
-RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run && \
-    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run && \
-    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run
+RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
+    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
+    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
-# Create a shell script to run both FastAPI and Streamlit
+# Ensure appuser has write permissions for /var/log
+RUN chown -R appuser:appgroup /var/log
+
+# Create a directory for application logs and ensure appuser owns it
+RUN mkdir -p /app/logs && \
+    chown -R appuser:appgroup /app/logs
+
+# Create a shell script to run both FastAPI and Streamlit with debug info
 RUN echo "#!/bin/bash\n\
+    echo 'Starting FastAPI...'\n\
     uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
+    sleep 5\n\
+    echo 'Starting Streamlit...'\n\
     streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
+    sleep 5\n\
+    echo 'Starting Nginx...'\n\
     nginx -g 'daemon off;'\n" > /app/start.sh
 
 # Make the script executable
@@ -48,6 +59,8 @@ RUN chown -R appuser:appgroup /app
 
 # Expose the necessary ports
 EXPOSE 80
+EXPOSE 8000
+EXPOSE 8501
 
 # Switch to the new user for running application processes
 USER appuser
