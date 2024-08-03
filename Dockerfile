@@ -1,16 +1,14 @@
 FROM python:3.10-slim
 
-# Create a non-root user
+# Create a new user and group for non-root operations
 RUN groupadd -g 1001 appgroup && \
     useradd -u 1001 -g appgroup -m appuser
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the requirements file
+# Install required packages and dependencies
 COPY requirements.txt /app/requirements.txt
-
-# Install dependencies and Nginx
 RUN apt-get update && \
     apt-get install -y python3-distutils nginx && \
     pip install --no-cache-dir -r /app/requirements.txt && \
@@ -19,40 +17,52 @@ RUN apt-get update && \
 # Copy the application files
 COPY . /app
 
-# Configure Nginx
+# Remove the default Nginx configuration file
 RUN rm /etc/nginx/sites-enabled/default
+
+# Copy the Nginx configuration files
 COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Ensure directories exist and set permissions for Nginx and application files
-RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
-    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
-    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
-    mkdir -p /app/logs && \
-    chown -R appuser:appgroup /app/logs && \
-    chmod -R 755 /app/logs && \
-    touch /app/logs/fastapi.log /app/logs/streamlit.log /var/log/nginx/access.log /var/log/nginx/error.log && \
-    chown appuser:appgroup /app/logs/fastapi.log /app/logs/streamlit.log /var/log/nginx/access.log /var/log/nginx/error.log
+# Ensure Nginx configuration files have correct permissions
+RUN chown -R root:root /etc/nginx && \
+    chmod -R 644 /etc/nginx/nginx.conf /etc/nginx/conf.d/app.conf
 
-# Create the start script
+# Create necessary directories for Nginx and set correct permissions
+RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/scgi /var/lib/nginx/uwsgi && \
+    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
+    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
+
+# Create a directory for application logs and set permissions
+RUN mkdir -p /app/logs && \
+    chown -R appuser:appgroup /app/logs && \
+    chmod -R 755 /app/logs
+
+# Ensure log files have correct permissions
+RUN touch /var/log/nginx/access.log /var/log/nginx/error.log && \
+    chown appuser:appgroup /var/log/nginx/access.log /var/log/nginx/error.log
+
+# Create a shell script to run FastAPI, Streamlit, and Nginx
 RUN echo "#!/bin/bash\n\
     echo 'Starting FastAPI...'\n\
-    uvicorn main:app --host 0.0.0.0 --port 8000 &> /app/logs/fastapi.log &\n\
+    uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
     sleep 5\n\
     echo 'Starting Streamlit...'\n\
-    streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &> /app/logs/streamlit.log &\n\
+    streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
     sleep 5\n\
     echo 'Starting Nginx...'\n\
     nginx -g 'daemon off;'\n" > /app/start.sh
 
-# Make the start script executable
+# Make the script executable
 RUN chmod +x /app/start.sh
+
+# Change ownership of the /app directory to appuser
 RUN chown -R appuser:appgroup /app
 
-# Expose necessary ports
+# Expose ports
 EXPOSE 8080 8000 8501
 
-# Switch to the non-root user
+# Switch to non-root user
 USER appuser
 
 # Start the services
