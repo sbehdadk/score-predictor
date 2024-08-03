@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-api_url = "http://localhost:8080/api/prediction"
+api_url = "/api/prediction"
 
 
 def get_prediction(data):
