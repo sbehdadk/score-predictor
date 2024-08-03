@@ -27,6 +27,13 @@ class PredictionInput(BaseModel):
     reading_score: int
 
 
+@app.get("/")
+async def root(logs: str = None):
+    if logs == "container":
+        return {"message": "Container is running"}
+    return {"message": "Welcome to the FastAPI API!"}
+
+
 # Add a root endpoint
 @app.get("/api/")
 async def read_root():
