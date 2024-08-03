@@ -7,10 +7,10 @@ RUN groupadd -g 1001 appgroup && \
 # Set the working directory
 WORKDIR /app
 
-# Install required packages, dependencies, and sudo
+# Install required packages and dependencies
 COPY requirements.txt /app/requirements.txt
 RUN apt-get update && \
-    apt-get install -y python3-distutils sudo nginx && \
+    apt-get install -y python3-distutils nginx && \
     pip install --no-cache-dir -r /app/requirements.txt && \
     rm -rf /var/lib/apt/lists/*
 
@@ -30,7 +30,7 @@ RUN chown -R root:root /etc/nginx && \
 
 # Create necessary directories for Nginx and set correct permissions
 RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/scgi /var/lib/nginx/uwsgi && \
-    chown -R root:root /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
+    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
     chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
 # Create a directory for application logs and set permissions
@@ -38,22 +38,22 @@ RUN mkdir -p /app/logs && \
     chown -R appuser:appgroup /app/logs && \
     chmod -R 755 /app/logs
 
+# Set Nginx to run as appuser
+RUN sed -i 's/user  nginx;/user appuser appgroup;/g' /etc/nginx/nginx.conf
+
 # Create a shell script to run FastAPI, Streamlit, and Nginx
 RUN echo "#!/bin/bash\n\
     echo 'Starting FastAPI...'\n\
-    sudo -u appuser uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
+    uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
     sleep 5\n\
     echo 'Starting Streamlit...'\n\
-    sudo -u appuser streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
+    streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
     sleep 5\n\
     echo 'Starting Nginx...'\n\
     nginx -g 'daemon off;'\n" > /app/start.sh
 
 # Make the script executable
 RUN chmod +x /app/start.sh
-
-# Allow appuser to run sudo without a password
-RUN echo "appuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Change ownership of the /app directory to appuser
 RUN chown -R appuser:appgroup /app
