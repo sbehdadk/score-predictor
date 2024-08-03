@@ -38,9 +38,6 @@ RUN mkdir -p /app/logs && \
     chown -R appuser:appgroup /app/logs && \
     chmod -R 755 /app/logs
 
-# Set Nginx to run as appuser
-RUN sed -i 's/user  nginx;/user appuser appgroup;/g' /etc/nginx/nginx.conf
-
 # Ensure log files have correct permissions
 RUN touch /var/log/nginx/access.log /var/log/nginx/error.log && \
     chown appuser:appgroup /var/log/nginx/access.log /var/log/nginx/error.log
