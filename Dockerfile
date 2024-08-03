@@ -26,9 +26,9 @@ COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Create necessary directories and set permissions
-RUN mkdir -p /var/log/nginx /var/cache/nginx /var/run && \
-    chown -R appuser:appgroup /var/log/nginx /var/cache/nginx /var/run && \
-    chmod -R 755 /var/log/nginx /var/cache/nginx /var/run && \
+RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run && \
+    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run && \
+    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var_run && \
     chown -R root:root /etc/nginx && \
     chmod -R 644 /etc/nginx/nginx.conf
 
