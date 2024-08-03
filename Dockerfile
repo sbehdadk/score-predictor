@@ -1,51 +1,32 @@
-FROM python:3.10-slim
+# Base image for Python
+FROM python:3.9-slim
 
-RUN groupadd -g 1001 appgroup && \
-    useradd -u 1001 -g appgroup -m appuser
-
+# Set the working directory
 WORKDIR /app
 
-COPY requirements.txt /app/requirements.txt
-RUN apt-get update && \
-    apt-get install -y python3-distutils nginx && \
-    pip install --no-cache-dir -r /app/requirements.txt && \
-    rm -rf /var/lib/apt/lists/*
+# Copy the requirements file
+COPY requirements.txt .
 
-COPY . /app
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-RUN rm /etc/nginx/sites-enabled/default
-COPY nginx/app.conf /etc/nginx/conf.d/
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
+# Copy the app files
+COPY . .
 
-RUN chown -R root:root /etc/nginx && \
-    chmod -R 644 /etc/nginx/nginx.conf /etc/nginx/conf.d/app.conf
+# Install Streamlit, FastAPI, and Nginx
+RUN pip install streamlit fastapi uvicorn
+RUN apt-get update && apt-get install -y nginx
 
-RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/scgi /var/lib/nginx/uwsgi && \
-    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
-    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
+# Copy Nginx configuration files
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY app.conf /etc/nginx/conf.d/default.conf
 
-RUN mkdir -p /app/logs && \
-    chown -R appuser:appgroup /app/logs && \
-    chmod -R 755 /app/logs
+# Expose ports for FastAPI, Streamlit, and Nginx
+EXPOSE 8000
+EXPOSE 8501
+EXPOSE 8080
 
-RUN touch /var/log/nginx/access.log /var/log/nginx/error.log && \
-    chown appuser:appgroup /var/log/nginx/access.log /var/log/nginx/error.log
-
-RUN echo "#!/bin/bash\n\
-    echo 'Starting FastAPI...'\n\
-    uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
-    sleep 5\n\
-    echo 'Starting Streamlit...'\n\
-    streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
-    sleep 5\n\
-    echo 'Starting Nginx...'\n\
-    nginx -g 'daemon off;'\n" > /app/start.sh
-
-RUN chmod +x /app/start.sh
-RUN chown -R appuser:appgroup /app
-
-EXPOSE 8080 8000 8501
-
-USER appuser
-
-CMD ["sh", "/app/start.sh"]
+# Run Nginx, FastAPI, and Streamlit
+CMD service nginx start && \
+    uvicorn main:app --host 0.0.0.0 --port 8000 & \
+    streamlit run streamlit.py --server.port 8501
