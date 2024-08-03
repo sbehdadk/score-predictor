@@ -29,7 +29,7 @@ RUN chown -R root:root /etc/nginx && \
     chmod -R 644 /etc/nginx/nginx.conf
 
 # Create necessary directories with the right permissions
-RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/lib/nginx/body && \
+RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/lib/nginx/body /var/lib/nginx/proxy && \
     chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
     chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
