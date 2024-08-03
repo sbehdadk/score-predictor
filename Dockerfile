@@ -33,8 +33,8 @@ RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
     chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
     chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
-# Ensure appuser has write permissions for /var/log
-RUN chown -R appuser:appgroup /var/log/nginx
+# Ensure appuser has write permissions for /var/lib/nginx and /var/log/nginx
+RUN chown -R appuser:appgroup /var/lib/nginx /var/log/nginx
 
 # Create a directory for application logs and ensure appuser owns it
 RUN mkdir -p /app/logs && \
