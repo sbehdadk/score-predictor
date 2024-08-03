@@ -1,5 +1,25 @@
 .
-├── app
+├── catboost_info
+│   ├── catboost_training.json
+│   ├── learn
+│   │   └── events.out.tfevents
+│   ├── learn_error.tsv
+│   ├── time_left.tsv
+│   └── tmp
+├── Dockerfile
+├── env.py
+├── main.py
+├── nginx
+│   ├── app.conf
+│   └── nginx.conf
+├── project_structure.txt
+├── __pycache__
+│   ├── application.cpython-312.pyc
+│   ├── env.cpython-310.pyc
+│   └── main.cpython-312.pyc
+├── README.md
+├── requirements.txt
+├── src
 │   ├── components
 │   │   ├── artifacts
 │   │   │   ├── model.pkl
@@ -63,30 +83,9 @@
 │   │   │   └── visualization.cpython-39.pyc
 │   │   └── visualization.py
 │   └── utils.py
-├── catboost_info
-│   ├── catboost_training.json
-│   ├── learn
-│   │   └── events.out.tfevents
-│   ├── learn_error.tsv
-│   ├── time_left.tsv
-│   └── tmp
-├── Dockerfile
-├── entrypoint.sh
-├── env.py
-├── main.py
-├── nginx.conf
-├── project_structure.txt
-├── __pycache__
-│   ├── application.cpython-312.pyc
-│   └── env.cpython-310.pyc
-├── README.md
-├── requirements.txt
 ├── streamlit.py
-├── supervisord.conf
 └── tests
     ├── __init__.py
     └── __pycache__
 
-17 directories, 70 files
-
-
+18 directories, 70 files
