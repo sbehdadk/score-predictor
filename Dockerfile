@@ -1,18 +1,18 @@
 FROM python:3.10-slim
 
-# Create a new user and group before any operations
+# Create a new user and group
 RUN groupadd -g 1001 appgroup && \
     useradd -u 1001 -g appgroup -m appuser
 
 # Set the working directory
 WORKDIR /app
 
-# Install required packages and distutils
+# Install required packages and dependencies
 COPY requirements.txt /app/requirements.txt
 RUN apt-get update && \
     apt-get install -y python3-distutils nginx && \
-    rm -rf /var/lib/apt/lists/* && \
-    pip install --no-cache-dir -r /app/requirements.txt
+    pip install --no-cache-dir -r /app/requirements.txt && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy the application files
 COPY . /app
@@ -24,23 +24,21 @@ RUN rm /etc/nginx/sites-enabled/default
 COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Ensure nginx.conf and other config files have correct permissions
+# Ensure Nginx configuration files have correct permissions
 RUN chown -R root:root /etc/nginx && \
-    chmod -R 644 /etc/nginx/nginx.conf
+    chmod -R 644 /etc/nginx/nginx.conf /etc/nginx/conf.d/app.conf
 
-# Create necessary directories with the right permissions
+# Create necessary directories for Nginx and set correct permissions
 RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/scgi /var/lib/nginx/uwsgi && \
     chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
     chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
-# Ensure appuser has write permissions for /var/log
-RUN chown -R appuser:appgroup /var/log/nginx
-
-# Create a directory for application logs and ensure appuser owns it
+# Create a directory for application logs and set permissions
 RUN mkdir -p /app/logs && \
-    chown -R appuser:appgroup /app/logs
+    chown -R appuser:appgroup /app/logs && \
+    chmod -R 755 /app/logs
 
-# Create a shell script to run both FastAPI and Streamlit with debug info
+# Create a shell script to run FastAPI, Streamlit, and Nginx
 RUN echo "#!/bin/bash\n\
     echo 'Starting FastAPI...'\n\
     uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
@@ -57,11 +55,11 @@ RUN chmod +x /app/start.sh
 # Change ownership of the /app directory to appuser
 RUN chown -R appuser:appgroup /app
 
-# Expose the necessary ports
+# Expose port 80
 EXPOSE 80
 
-# Switch to the new user for running application processes
+# Switch to non-root user
 USER appuser
 
-# Command to run the shell script
+# Start the services
 CMD ["sh", "/app/start.sh"]
