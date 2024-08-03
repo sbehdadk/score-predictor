@@ -1,6 +1,13 @@
 import streamlit as st
 import requests
 
+api_url = "https://sbehdadk-score-predictor.hf.space/api/prediction"
+
+
+def get_prediction(data):
+    response = requests.post(api_url, json=data)
+    return response.json()
+
 
 def show_dashboard():
     st.title("Student Performance Prediction Dashboard")
@@ -68,8 +75,7 @@ def show_dashboard():
         )
 
     if st.button("Predict"):
-        response = requests.post(
-            "http://localhost:8000/prediction",
+        response = get_prediction(
             data={
                 "gender": gender,
                 "race_ethnicity": race_ethnicity,

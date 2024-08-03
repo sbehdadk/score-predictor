@@ -4,13 +4,6 @@ from src.streamlit.dashboard import show_dashboard
 from src.streamlit.visualization import show_visualization
 import requests
 
-api_url = "https://sbehdadk-score-predictor.hf.space/api/prediction"
-
-
-def get_prediction(data):
-    response = requests.post(api_url, json=data)
-    return response.json()
-
 
 def main():
     st.sidebar.title("Navigation")
