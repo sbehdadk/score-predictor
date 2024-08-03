@@ -24,10 +24,8 @@ RUN rm /etc/nginx/sites-enabled/default
 COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Set permissions for Nginx and application files
-RUN chown -R root:root /etc/nginx && \
-    chmod -R 644 /etc/nginx/nginx.conf /etc/nginx/conf.d/app.conf && \
-    mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
+# Ensure directories exist and set permissions for Nginx and application files
+RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
     chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
     chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
     mkdir -p /app/logs && \
