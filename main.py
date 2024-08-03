@@ -2,10 +2,19 @@ import uvicorn
 import os
 from fastapi import FastAPI, Form
 from fastapi.responses import HTMLResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from src.pipeline.predict_pipeline import CustomDataSource, PredictPipeline
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class PredictionInput(BaseModel):

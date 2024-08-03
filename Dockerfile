@@ -33,10 +33,10 @@ RUN touch /var/log/nginx/access.log /var/log/nginx/error.log && \
 
 RUN echo "#!/bin/bash\n\
     echo 'Starting FastAPI...'\n\
-    uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
+    uvicorn main:app --host 0.0.0.0 --port 8000 &> /app/logs/fastapi.log &\n\
     sleep 5\n\
     echo 'Starting Streamlit...'\n\
-    streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
+    streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &> /app/logs/streamlit.log &\n\
     sleep 5\n\
     echo 'Starting Nginx...'\n\
     nginx -g 'daemon off;'\n" > /app/start.sh
