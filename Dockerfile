@@ -46,7 +46,7 @@ RUN echo "#!/bin/bash\n\
     uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
     sleep 5\n\
     echo 'Starting Streamlit...'\n\
-    streamlit run app.py --server.port 8501 --server.address 0.0.0.0 &\n\
+    streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
     sleep 5\n\
     echo 'Starting Nginx...'\n\
     nginx -g 'daemon off;'\n" > /app/start.sh
