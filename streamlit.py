@@ -2,7 +2,6 @@ import streamlit as st
 from src.streamlit.home import show_home
 from src.streamlit.dashboard import show_dashboard
 from src.streamlit.visualization import show_visualization
-import requests
 
 
 def main():
