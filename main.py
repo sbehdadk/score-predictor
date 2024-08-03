@@ -5,6 +5,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from src.pipeline.predict_pipeline import CustomDataSource, PredictPipeline
+import streamlit
 
 app = FastAPI()
 
@@ -31,7 +32,7 @@ class PredictionInput(BaseModel):
 async def root(logs: str = None):
     if logs == "container":
         return {"message": "Container is running"}
-    return {"message": "Welcome to the FastAPI API!"}
+    return streamlit.main()
 
 
 # Add a root endpoint
