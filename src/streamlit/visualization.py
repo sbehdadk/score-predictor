@@ -9,9 +9,7 @@ def show_visualization():
 
     st.write("Please upload your data file to visualize it.")
 
-    uploaded_file = st.file_uploader(
-        "Upload your data file", type=["csv", "xlsx"]
-    )
+    uploaded_file = st.file_uploader("Upload your data file", type=["csv", "xlsx"])
 
     if uploaded_file is not None:
         data = pd.read_csv(uploaded_file)

@@ -8,16 +8,6 @@ from src.pipeline.predict_pipeline import CustomDataSource, PredictPipeline
 
 app = FastAPI()
 
-origins = ["*"]
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
 
 class PredictionInput(BaseModel):
     gender: str
