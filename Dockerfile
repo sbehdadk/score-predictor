@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-# Create a new user and group
+# Create a new user and group before any operations
 RUN groupadd -g 1001 appgroup && \
     useradd -u 1001 -g appgroup -m appuser
 
@@ -25,17 +25,19 @@ RUN rm /etc/nginx/sites-enabled/default
 COPY nginx/app.conf /etc/nginx/conf.d/
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
-# Create necessary directories and set permissions
+# Ensure nginx.conf and other config files have correct permissions
+RUN chown -R root:root /etc/nginx && \
+    chmod -R 644 /etc/nginx/nginx.conf
+
+# Create necessary directories with the right permissions
 RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run && \
     chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run && \
-    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var_run && \
-    chown -R root:root /etc/nginx && \
-    chmod -R 644 /etc/nginx/nginx.conf
+    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run
 
 # Create a shell script to run both FastAPI and Streamlit
 RUN echo "#!/bin/bash\n\
-    uvicorn main:app --host 127.0.0.1 --port 8000 &\n\
-    streamlit run streamlit.py --server.port 8501 --server.address 127.0.0.1 &\n\
+    uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
+    streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
     nginx -g 'daemon off;'\n" > /app/start.sh
 
 # Make the script executable
