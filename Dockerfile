@@ -1,11 +1,10 @@
 FROM python:3.10-slim
 
-# Create necessary users and groups
+# Create a new user and group before any operations
 RUN groupadd -g 1001 appgroup && \
-    useradd -u 1001 -g appgroup -m appuser && \
-    groupadd -g 1002 nginxgroup && \
-    useradd -u 1002 -g nginxgroup -s /bin/false nginx
+    useradd -u 1001 -g appgroup -m appuser
 
+# Set the working directory
 WORKDIR /app
 
 # Install required packages and distutils
@@ -30,13 +29,12 @@ RUN chown -R root:root /etc/nginx && \
     chmod -R 644 /etc/nginx/nginx.conf
 
 # Create necessary directories with the right permissions
-RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run \
-    /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/uwsgi /var/lib/nginx/scgi && \
-    chown -R nginx:nginxgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
+RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
+    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
     chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
 # Ensure appuser has write permissions for /var/log
-RUN chown -R appuser:appgroup /var/log
+RUN chown -R appuser:appgroup /var/log/nginx
 
 # Create a directory for application logs and ensure appuser owns it
 RUN mkdir -p /app/logs && \
@@ -48,7 +46,7 @@ RUN echo "#!/bin/bash\n\
     uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
     sleep 5\n\
     echo 'Starting Streamlit...'\n\
-    streamlit run streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
+    streamlit run app.py --server.port 8501 --server.address 0.0.0.0 &\n\
     sleep 5\n\
     echo 'Starting Nginx...'\n\
     nginx -g 'daemon off;'\n" > /app/start.sh
@@ -61,8 +59,6 @@ RUN chown -R appuser:appgroup /app
 
 # Expose the necessary ports
 EXPOSE 80
-EXPOSE 8000
-EXPOSE 8501
 
 # Switch to the new user for running application processes
 USER appuser
