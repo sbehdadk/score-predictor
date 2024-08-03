@@ -7,10 +7,10 @@ RUN groupadd -g 1001 appgroup && \
 # Set the working directory
 WORKDIR /app
 
-# Install required packages and dependencies
+# Install required packages, dependencies, and sudo
 COPY requirements.txt /app/requirements.txt
 RUN apt-get update && \
-    apt-get install -y python3-distutils nginx && \
+    apt-get install -y python3-distutils sudo nginx && \
     pip install --no-cache-dir -r /app/requirements.txt && \
     rm -rf /var/lib/apt/lists/*
 
@@ -52,9 +52,8 @@ RUN echo "#!/bin/bash\n\
 # Make the script executable
 RUN chmod +x /app/start.sh
 
-# Install sudo for running commands as appuser
-RUN apt-get install -y sudo && \
-    echo "appuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+# Allow appuser to run sudo without a password
+RUN echo "appuser ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Change ownership of the /app directory to appuser
 RUN chown -R appuser:appgroup /app
@@ -62,5 +61,8 @@ RUN chown -R appuser:appgroup /app
 # Expose port 80
 EXPOSE 80
 
-# Command to run the shell script
+# Switch to non-root user
+USER appuser
+
+# Start the services
 CMD ["sh", "/app/start.sh"]
