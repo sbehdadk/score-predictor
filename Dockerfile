@@ -41,6 +41,10 @@ RUN mkdir -p /app/logs && \
 # Set Nginx to run as appuser
 RUN sed -i 's/user  nginx;/user appuser appgroup;/g' /etc/nginx/nginx.conf
 
+# Ensure log files have correct permissions
+RUN touch /var/log/nginx/access.log /var/log/nginx/error.log && \
+    chown appuser:appgroup /var/log/nginx/access.log /var/log/nginx/error.log
+
 # Create a shell script to run FastAPI, Streamlit, and Nginx
 RUN echo "#!/bin/bash\n\
     echo 'Starting FastAPI...'\n\
