@@ -8,7 +8,7 @@ from src.pipeline.predict_pipeline import CustomDataSource, PredictPipeline
 
 app = FastAPI()
 
-origins = ["https://student-score-predictor.streamlit.app/"]
+origins = ["https://sbehdadk-score-predictor.hf.space"]
 
 app.add_middleware(
     CORSMiddleware,
