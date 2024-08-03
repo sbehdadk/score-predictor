@@ -1,8 +1,10 @@
 FROM python:3.10-slim
 
-# Create a new user and group before any operations
+# Create necessary users and groups
 RUN groupadd -g 1001 appgroup && \
-    useradd -u 1001 -g appgroup -m appuser
+    useradd -u 1001 -g appgroup -m appuser && \
+    groupadd -g 1002 nginxgroup && \
+    useradd -u 1002 -g nginxgroup -s /bin/false nginx
 
 WORKDIR /app
 
@@ -30,12 +32,8 @@ RUN chown -R root:root /etc/nginx && \
 # Create necessary directories with the right permissions
 RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run \
     /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/uwsgi /var/lib/nginx/scgi && \
-    chown -R appuser:appgroup /var/lib/nginx /var/cache/nginx /var/run /run && \
-    chmod -R 755 /var/lib/nginx /var/cache/nginx /var/run /run
-
-# Set appropriate permissions for the Nginx log directory
-RUN chown -R nginx:adm /var/log/nginx && \
-    chmod -R 755 /var/log/nginx
+    chown -R nginx:nginxgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
+    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
 # Ensure appuser has write permissions for /var/log
 RUN chown -R appuser:appgroup /var/log
