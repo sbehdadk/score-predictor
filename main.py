@@ -30,7 +30,7 @@ class PredictionInput(BaseModel):
 
 
 # Add a root endpoint
-@app.get("/")
+@app.get("/api/")
 async def read_root():
     return {"message": "Welcome to the FastAPI application!"}
 
@@ -53,4 +53,4 @@ async def predict(input_data: PredictionInput):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8081)
+    uvicorn.run(app, host="0.0.0.0", port=8000)
