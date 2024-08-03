@@ -18,8 +18,8 @@ RUN pip install streamlit fastapi uvicorn
 RUN apt-get update && apt-get install -y nginx
 
 # Copy Nginx configuration files
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY app.conf /etc/nginx/conf.d/default.conf
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/app.conf /etc/nginx/conf.d/default.conf
 
 # Expose ports for FastAPI, Streamlit, and Nginx
 EXPOSE 8000
