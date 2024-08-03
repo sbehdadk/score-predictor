@@ -62,8 +62,8 @@ RUN chmod +x /app/start.sh
 # Change ownership of the /app directory to appuser
 RUN chown -R appuser:appgroup /app
 
-# Expose port 80
-EXPOSE 80
+# Expose port 8080
+EXPOSE 8080
 
 # Switch to non-root user
 USER appuser
