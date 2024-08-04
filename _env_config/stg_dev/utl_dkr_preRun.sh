@@ -1,12 +1,5 @@
 #!/bin/bash
 
-#--- Note:  this file is designed to run locally as well as within docker to prep the environment
-#--- Entry:  this script is assumed to run from the /app root folder
-#--- Usage:  ./_env_config/local_dev/utl_dkr_preRun.sh
-
-#--- for volume initialization; ensure folders are in place; assume:  we are in the /app folder
-
-
 <<blockComment 
 - 
 blockComment
