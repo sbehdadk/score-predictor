@@ -35,8 +35,9 @@ RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/l
 
 # Create a directory for application logs and set permissions
 RUN mkdir -p /app/logs && \
-    chown -R appuser:appgroup /app/logs && \
-    chmod -R 755 /app/logs
+    mkdir -p /app/run && \
+    chown -R appuser:appgroup /app/logs /app/run && \
+    chmod -R 755 /app/logs /app/run
 
 # Ensure Supervisor configuration
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
