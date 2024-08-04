@@ -1,4 +1,4 @@
-import app_streamlit as st
+import streamlit as st
 import requests
 
 api_url = "http://localhost:8000/api/prediction"
