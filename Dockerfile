@@ -1,18 +1,18 @@
 FROM python:3.10-slim
 
-# Install dependencies and create user
-RUN apt-get update && \
-    apt-get install -y python3-distutils nginx supervisor && \
-    groupadd -g 1001 appgroup && \
-    useradd -u 1001 -g appgroup -m appuser && \
-    pip install --no-cache-dir supervisor
+# Create a new user and group for non-root operations
+RUN groupadd -g 1001 appgroup && \
+    useradd -u 1001 -g appgroup -m appuser
 
 # Set the working directory
 WORKDIR /app
 
-# Copy requirements and install Python dependencies
+# Install required packages and dependencies
 COPY requirements.txt /app/requirements.txt
-RUN pip install --no-cache-dir -r /app/requirements.txt
+RUN apt-get update && \
+    apt-get install -y python3-distutils nginx supervisor && \
+    pip install --no-cache-dir -r /app/requirements.txt && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy the application files
 COPY . /app
@@ -31,7 +31,7 @@ RUN chown -R root:root /etc/nginx && \
 # Create necessary directories for Nginx and set correct permissions
 RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/scgi /var/lib/nginx/uwsgi && \
     chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
-    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var_run /run
+    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
 # Create a directory for application logs and set permissions
 RUN mkdir -p /app/logs && \
