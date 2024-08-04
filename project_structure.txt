@@ -1,5 +1,4 @@
 .
-├── app_streamlit.py
 ├── catboost_info
 │   ├── catboost_training.json
 │   ├── learn
@@ -8,12 +7,17 @@
 │   ├── time_left.tsv
 │   └── tmp
 ├── Dockerfile
+├── _env_config
+│   └── stg_dev
+│       └── utl_dkr_preRun.sh
 ├── env.py
+├── fastapi
+│   └── entry_fastapi.py
 ├── logs
-├── main.py
 ├── nginx
-│   ├── app.conf
-│   └── nginx.conf
+│   ├── etc.nginx.confd_default.conf
+│   ├── etc.nginx_nginx.conf
+│   └── etc.nginx.sites-available.default
 ├── project_structure.txt
 ├── __pycache__
 │   ├── application.cpython-312.pyc
@@ -90,8 +94,10 @@
 │   │   │   └── visualization.cpython-39.pyc
 │   │   └── visualization.py
 │   └── utils.py
+├── streamlit
+│   └── entry_streamlit.py
 └── tests
     ├── __init__.py
     └── __pycache__
 
-19 directories, 75 files
+23 directories, 77 files
