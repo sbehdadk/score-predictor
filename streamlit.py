@@ -1,12 +1,12 @@
 import streamlit as st
-from src.streamlit.home import show_home
-from src.streamlit.dashboard import show_dashboard
-from src.streamlit.visualization import show_visualization
+from src.streamlit_components.home import show_home
+from src.streamlit_components.dashboard import show_dashboard
+from src.streamlit_components.visualization import show_visualization
 
 
 def main():
-    st.sidebar.title("Navigation")
-    selection = st.sidebar.radio("Go to", ["Home", "Dashboard", "Visualization"])
+    st.title("Navigation")
+    selection = st.radio("Go to", ["Home", "Dashboard", "Visualization"])
     if selection == "Home":
         show_home()
     elif selection == "Dashboard":
