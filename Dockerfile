@@ -44,15 +44,18 @@ RUN touch /var/log/nginx/access.log /var/log/nginx/error.log && \
 
 # Create a shell script to run FastAPI, Streamlit, and Nginx
 RUN echo "#!/bin/bash\n\
+    service nginx start \
     echo 'Starting FastAPI...'\n\
     uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
     sleep 5\n\
     echo 'Starting Streamlit...'\n\
     streamlit run app_streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
-    sleep 5\n\
-    echo 'Starting Nginx...'\n\
-    nginx -g 'daemon off;'\n" > /app/start.sh
+    sleep 5\n" > /app/start.sh
 
+
+
+# echo 'Starting Nginx...'\n\
+# nginx -g 'daemon off;'\n
 # Make the script executable
 RUN chmod +x /app/start.sh
 
