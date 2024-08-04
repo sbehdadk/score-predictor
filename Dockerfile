@@ -59,15 +59,10 @@ WORKDIR $HOME/app
 COPY --chown=user ./requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r ./requirements.txt
 
-# Explicitly install and verify Streamlit
-RUN pip install --no-cache-dir streamlit==1.37.0
-RUN python -c "import streamlit; print('Streamlit version:', streamlit.__version__)"
-RUN python -c "import streamlit; print('Streamlit path:', streamlit.__file__)"
-
 # Copy necessary files
 COPY --chown=user ./_env_config/stg_dev/utl_dkr_preRun.sh ./scripts/docker/
-COPY --chown=user ./fastapi ./fastapi
-COPY --chown=user ./streamlit ./streamlit
+COPY --chown=user ./fastapi_app ./fastapi_app
+COPY --chown=user ./streamlit_app ./streamlit_app
 COPY --chown=user ./env.py ./env.py
 COPY --chown=user ./src ./src
 COPY --chown=user ./tests ./tests
