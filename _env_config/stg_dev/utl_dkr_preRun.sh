@@ -25,12 +25,12 @@ service nginx start
 
 #--- for fastapi;  external 49132;  internal 39132
 echo "INFO:  starting fastapi ..."
-uvicorn --app-dir=./fastapi entry_fastapi:app --reload --workers 1 --host 0.0.0.0 --port 39132 &          #--- specify a non-root app dir
+uvicorn --app-dir=./fastapi_app entry_fastapi:app --reload --workers 1 --host 0.0.0.0 --port 39132 &          #--- specify a non-root app dir
 
 
 #--- for streamlit;  external 49131;  internal 39131
 echo "INFO:  starting streamlit ..."
-streamlit run ./streamlit/entry_streamlit.py --server.port=39131 --server.maxUploadSize=2000            #--- & run in the background
+streamlit run ./streamlit_app/entry_streamlit.py --server.port=39131 --server.maxUploadSize=2000            #--- & run in the background
 
 
 
