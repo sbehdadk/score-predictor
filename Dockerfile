@@ -29,9 +29,9 @@ RUN chown -R root:root /etc/nginx && \
     chmod -R 644 /etc/nginx/nginx.conf /etc/nginx/conf.d/app.conf
 
 # Create necessary directories for Nginx and set correct permissions
-RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var_run /run /var_lib/nginx/body /var_lib/nginx/proxy /var_lib/nginx/fastcgi /var_lib/nginx/scgi /var_lib/nginx/uwsgi && \
-    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var_run /run && \
-    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var_run /run
+RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/scgi /var/lib/nginx/uwsgi && \
+    chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
+    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
 # Create a directory for application logs and set permissions
 RUN mkdir -p /app/logs /app/run && \
