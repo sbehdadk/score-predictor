@@ -41,7 +41,7 @@ class PredictionInput(BaseModel):
 @app.get("/")
 async def root(logs: str = None):
     if logs == "container":
-        return {"message": "Container is running"}
+        return {"message": "Container is running!!!"}
     return streamlit.main()
 
 
