@@ -1,4 +1,4 @@
-import app_streamlit as st
+import streamlit as st
 
 
 def show_home():
