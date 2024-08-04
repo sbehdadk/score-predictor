@@ -6,7 +6,7 @@ colorTo: indigo
 sdk: docker
 python_version: 3.9
 app_file: app/main.py
-app_port: 8000
+app_port: 7860
 fullWidth: true
 header: default
 short_description: predicts the student scores.
