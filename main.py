@@ -42,7 +42,7 @@ class PredictionInput(BaseModel):
 async def root(logs: str = None):
     if logs == "container":
         return {"message": "Container is running!!!"}
-    return streamlit.main()
+    return {"message": "Not in the Container"}
 
 
 # Add a root endpoint
