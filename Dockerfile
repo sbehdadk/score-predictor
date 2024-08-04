@@ -31,7 +31,7 @@ RUN chown -R root:root /etc/nginx && \
 # Create necessary directories for Nginx and set correct permissions
 RUN mkdir -p /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /var/lib/nginx/body /var/lib/nginx/proxy /var/lib/nginx/fastcgi /var/lib/nginx/scgi /var/lib/nginx/uwsgi && \
     chown -R appuser:appgroup /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run && \
-    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var_run /run
+    chmod -R 755 /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run
 
 # Create a directory for application logs and set permissions
 RUN mkdir -p /app/logs /app/run && \
