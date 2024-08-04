@@ -63,6 +63,9 @@ RUN pip install --no-cache-dir -r ./requirements.txt
 COPY --chown=user ./_env_config/stg_dev/utl_dkr_preRun.sh ./scripts/docker/
 COPY --chown=user ./fastapi ./fastapi
 COPY --chown=user ./streamlit ./streamlit
+COPY --chown=user ./env.py ./env.py
+COPY --chown=user ./src ./src
+COPY --chown=user ./tests ./tests
 
 # Give execute permissions to the preRun script
 RUN chmod +x ./scripts/docker/utl_dkr_preRun.sh
