@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 
-api_url = "/api/prediction"
+api_url = "http://localhost:8000/api/prediction"
 
 
 def get_prediction(data):
@@ -35,13 +35,12 @@ def show_dashboard():
     col1, col2 = st.columns(2)
 
     with col1:
-        gender = st.selectbox("Gender", ["male", "female"], placeholder="Gender")
-        race_ethnicity = st.selectbox(
+        gender = st.sidebar.selectbox("Gender", ["male", "female"])
+        race_ethnicity = st.sidebar.selectbox(
             "Race",
             ["group A", "group B", "group C", "group D", "group E"],
-            placeholder="Race",
         )
-        parental_level_of_education = st.selectbox(
+        parental_level_of_education = st.sidebar.selectbox(
             "Parental Level of Education",
             [
                 "associate's degree",
@@ -51,25 +50,21 @@ def show_dashboard():
                 "some college",
                 "some high school",
             ],
-            placeholder="Parental Level of Education",
         )
 
     with col2:
-        lunch = st.selectbox("Lunch", ["free/reduced", "standard"], placeholder="Lunch")
-        test_preparation_course = st.selectbox(
+        lunch = st.sidebar.selectbox("Lunch", ["free/reduced", "standard"])
+        test_preparation_course = st.sidebar.selectbox(
             "Test Preparation Course",
             ["completed", "none"],
-            placeholder="Test Preparation Course",
         )
         writing_score = st.number_input(
             "Writing Score",
-            placeholder="writing score",
             min_value=0,
             max_value=100,
         )
         reading_score = st.number_input(
             "Reading Score",
-            placeholder="reading score",
             min_value=0,
             max_value=100,
         )
@@ -87,11 +82,8 @@ def show_dashboard():
             },
         )
 
-        if response.status_code == 200:
-            result = response.json().get("results")
-            st.success(f"Predicted Score: {result}")
-        else:
-            st.error("Error in prediction. Please try again.")
+        result = response.get("results")
+        st.success(f"Predicted Score: {result}")
 
 
 if __name__ == "__main__":
