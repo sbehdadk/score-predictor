@@ -18,7 +18,7 @@
 
 
 #--- use a base image of python
-FROM python:3.8-slim-buster
+FROM python:3.9-slim
 
 
 # Install nginx and give permissions to 'pn'
