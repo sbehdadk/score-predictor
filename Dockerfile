@@ -70,6 +70,9 @@ COPY --chown=user ./tests ./tests
 # Give execute permissions to the preRun script
 RUN chmod +x ./scripts/docker/utl_dkr_preRun.sh
 
+# Set the PYTHONPATH to include the app directory
+ENV PYTHONPATH="/home/user/app"
+
 # Expose necessary ports
 EXPOSE 7860
 EXPOSE 49131
