@@ -6,16 +6,26 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from src.pipeline.predict_pipeline import CustomDataSource, PredictPipeline
 import streamlit
+from fastapi.requests import Request
+from fastapi.responses import JSONResponse
 
 app = FastAPI()
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+
+@app.middleware("http")
+async def handle_hf_health_check(request: Request, call_next):
+    if request.url.path == "/" and request.query_params.get("logs") == "container":
+        return JSONResponse(content={"message": "Container is running"})
+    return await call_next(request)
 
 
 class PredictionInput(BaseModel):
