@@ -45,14 +45,11 @@ COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN chown -R appuser:appgroup /app && \
     chmod -R 755 /app
 
-# Ensure all files in /app are accessible by appuser
-RUN find /app -type f -exec chmod 755 {} \;
-
 # Expose necessary ports
 EXPOSE 8080 8000 8501
 
 # Switch to non-root user
 USER appuser
 
-# Ensure correct permissions on startup
-ENTRYPOINT ["sh", "-c", "chown -R appuser:appgroup /app /etc/nginx /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /tmp && chmod -R 755 /app /etc/nginx /var/lib/nginx /var/log/nginx /var/cache/nginx /var/run /run /tmp && /usr/bin/supervisord"]
+# Start the Supervisor service
+CMD ["/usr/bin/supervisord"]
