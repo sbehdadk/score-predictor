@@ -1,4 +1,5 @@
 .
+├── app_streamlit.py
 ├── catboost_info
 │   ├── catboost_training.json
 │   ├── learn
@@ -8,6 +9,7 @@
 │   └── tmp
 ├── Dockerfile
 ├── env.py
+├── logs
 ├── main.py
 ├── nginx
 │   ├── app.conf
@@ -16,7 +18,8 @@
 ├── __pycache__
 │   ├── application.cpython-312.pyc
 │   ├── env.cpython-310.pyc
-│   └── main.cpython-312.pyc
+│   ├── main.cpython-312.pyc
+│   └── streamlit.cpython-312.pyc
 ├── README.md
 ├── requirements.txt
 ├── src
@@ -72,20 +75,23 @@
 │   │   ├── utils.cpython-310.pyc
 │   │   ├── utils.cpython-312.pyc
 │   │   └── utils.cpython-39.pyc
-│   ├── streamlit
+│   ├── streamlit_components
 │   │   ├── dashboard.py
 │   │   ├── home.py
 │   │   ├── __init__.py
 │   │   ├── __pycache__
+│   │   │   ├── dashboard.cpython-312.pyc
 │   │   │   ├── dashboard.cpython-39.pyc
+│   │   │   ├── home.cpython-312.pyc
 │   │   │   ├── home.cpython-39.pyc
+│   │   │   ├── __init__.cpython-312.pyc
 │   │   │   ├── __init__.cpython-39.pyc
+│   │   │   ├── visualization.cpython-312.pyc
 │   │   │   └── visualization.cpython-39.pyc
 │   │   └── visualization.py
 │   └── utils.py
-├── streamlit.py
 └── tests
     ├── __init__.py
     └── __pycache__
 
-18 directories, 70 files
+19 directories, 75 files

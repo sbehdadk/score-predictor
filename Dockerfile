@@ -10,7 +10,7 @@ WORKDIR /app
 # Install required packages and dependencies
 COPY requirements.txt /app/requirements.txt
 RUN apt-get update && \
-    apt-get install -y python3-distutils nginx && \
+    apt-get install -y python3-distutils nginx supervisor && \
     pip install --no-cache-dir -r /app/requirements.txt && \
     rm -rf /var/lib/apt/lists/*
 
@@ -38,35 +38,17 @@ RUN mkdir -p /app/logs && \
     chown -R appuser:appgroup /app/logs && \
     chmod -R 755 /app/logs
 
-# Ensure log files have correct permissions
-RUN touch /var/log/nginx/access.log /var/log/nginx/error.log && \
-    chown appuser:appgroup /var/log/nginx/access.log /var/log/nginx/error.log
+# Ensure Supervisor configuration
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Create a shell script to run FastAPI, Streamlit, and Nginx
-RUN echo "#!/bin/bash\n\
-    service nginx start \
-    echo 'Starting FastAPI...'\n\
-    uvicorn main:app --host 0.0.0.0 --port 8000 &\n\
-    sleep 5\n\
-    echo 'Starting Streamlit...'\n\
-    streamlit run app_streamlit.py --server.port 8501 --server.address 0.0.0.0 &\n\
-    sleep 5\n" > /app/start.sh
-
-
-
-# echo 'Starting Nginx...'\n\
-# nginx -g 'daemon off;'\n
-# Make the script executable
-RUN chmod +x /app/start.sh
+# Expose necessary ports
+EXPOSE 8080 8000 8501
 
 # Change ownership of the /app directory to appuser
 RUN chown -R appuser:appgroup /app
 
-# Expose ports
-EXPOSE 8080 8000 8501
-
 # Switch to non-root user
 USER appuser
 
-# Start the services
-CMD ["sh", "/app/start.sh"]
+# Start the Supervisor service
+CMD ["/usr/bin/supervisord"]
