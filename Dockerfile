@@ -59,8 +59,9 @@ WORKDIR $HOME/app
 COPY --chown=user ./requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r ./requirements.txt
 
-# Reinstall Streamlit to ensure correct installation
-RUN pip install --no-cache-dir --upgrade streamlit
+# Explicitly install Streamlit and verify version
+RUN pip install --no-cache-dir streamlit==1.12.0
+RUN streamlit --version
 
 # Copy necessary files
 COPY --chown=user ./_env_config/stg_dev/utl_dkr_preRun.sh ./scripts/docker/
